@@ -1,8 +1,24 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-
+import { useContext, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { AuthContext } from '../../Providers/AuthProvider';
+import toast from 'react-hot-toast';
+import { GiShoppingCart } from 'react-icons/gi';
+import useCart from '../../hooks/useCart';
 const Navbar = () => {
+  const [cart] = useCart();
   const [isToggleOpen, setIsToggleOpen] = useState(false);
+  const { user, logOut } = useContext(AuthContext);
+  const handleLogOut = () => {
+    logOut()
+      .then(result => {
+        console.log(result);
+        toast.success('Logged out successfully!');
+      })
+      .catch(error => {
+        console.log(error);
+        toast.error('Logout failed! Please try again.');
+      });
+  };
 
   return (
     <div className="fixed z-10 w-full bg-black bg-opacity-30 text-white">
@@ -73,6 +89,27 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               ))}
+              <NavLink className="mr-6">
+                <button className="btn">
+                  <GiShoppingCart className="mt-4" />
+                  <div className="badge badge-secondary">+{cart.length}</div>
+                </button>
+              </NavLink>
+              {user ? (
+                <>
+                  {' '}
+                  <Link
+                    onClick={handleLogOut}
+                    className="btn bg-orange-700 text-white "
+                  >
+                    Logout
+                  </Link>
+                </>
+              ) : (
+                <Link to="/login" className="btn bg-sky-700 text-white">
+                  Login
+                </Link>
+              )}
             </ul>
           </nav>
         </div>

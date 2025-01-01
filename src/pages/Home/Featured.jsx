@@ -22,7 +22,7 @@ const Featured = () => {
             consequuntur omnis ullam maxime tenetur.
           </p>
           <button className="btn btn-outline border-0 border-b-4 mt-4">
-            Oder Now
+            ORDER NOW
           </button>
         </div>
       </div>
