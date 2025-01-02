@@ -7,6 +7,9 @@ import Login from '../pages/Authentication/Login';
 import SignUp from '../pages/Authentication/SignUp';
 import PriviteRoute from '../PrivateRoute/PriviteRoute';
 import Secret from '../Secret/Secret';
+
+import Cart from '../layout/DeshBoard/Cart';
+import Dashboard from '../layout/DeshBoard/Deshboard';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -39,6 +42,16 @@ const router = createBrowserRouter([
             <Secret></Secret>
           </PriviteRoute>
         ),
+      },
+    ],
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+    children: [
+      {
+        path: '/dashboard/cart',
+        element: <Cart />,
       },
     ],
   },

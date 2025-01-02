@@ -89,7 +89,7 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               ))}
-              <NavLink className="mr-6">
+              <NavLink to="/dashboard" className="mr-6">
                 <button className="btn">
                   <GiShoppingCart className="mt-4" />
                   <div className="badge badge-secondary">+{cart.length}</div>
