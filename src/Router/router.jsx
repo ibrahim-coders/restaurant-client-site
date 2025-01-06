@@ -10,6 +10,10 @@ import Secret from '../Secret/Secret';
 
 import Cart from '../layout/DeshBoard/Cart';
 import Dashboard from '../layout/DeshBoard/Deshboard';
+import AllUsers from '../layout/DeshBoard/AllUsers';
+import AddItems from '../layout/DeshBoard/AddItems';
+import AdminRouter from './AdminRouter';
+import ManageItems from '../layout/DeshBoard/ManageItems';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -47,11 +51,40 @@ const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <Dashboard />,
+    element: (
+      <PriviteRoute>
+        {' '}
+        <Dashboard />
+      </PriviteRoute>
+    ),
     children: [
       {
         path: '/dashboard/cart',
         element: <Cart />,
+      },
+      {
+        path: '/dashboard/additems',
+        element: (
+          <AdminRouter>
+            <AddItems />
+          </AdminRouter>
+        ),
+      },
+      {
+        path: '/dashboard/manageitems',
+        element: (
+          <AdminRouter>
+            <ManageItems />
+          </AdminRouter>
+        ),
+      },
+      {
+        path: '/dashboard/users',
+        element: (
+          <AdminRouter>
+            <AllUsers></AllUsers>
+          </AdminRouter>
+        ),
       },
     ],
   },

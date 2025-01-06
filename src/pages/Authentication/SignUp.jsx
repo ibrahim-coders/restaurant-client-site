@@ -4,19 +4,21 @@ import { useContext } from 'react';
 import { AuthContext } from '../../Providers/AuthProvider';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
+
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
   const { creactUser, updateUserProfile } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
+
   const onSubmit = data => {
     console.log(data);
     creactUser(data.email, data.password)
@@ -26,34 +28,45 @@ const SignUp = () => {
         toast.success('Successfully registered!');
         updateUserProfile(data.name, data.photourl)
           .then(() => {
-            toast.success('Profile updated successfully!');
+            const userInfo = {
+              name: data.name,
+              email: data.email,
+            };
+            axiosPublic.post('/users', userInfo).then(res => {
+              console.log('users');
+              if (res.data.insertedId) {
+                toast.success('Profile updated successfully!');
+              }
+            });
           })
           .catch(error => {
             console.error('Error updating profile:', error);
             toast.error('Profile update failed');
           });
-        navigate(from, { replace: true });
+        navigate('/');
       })
       .catch(error => {
         console.error(error);
+        toast.error('Registration failed');
       });
   };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 px-4">
       <Helmet>
-        <title>BISTRO | SingUp</title>
+        <title>BISTRO | SignUp</title>
       </Helmet>
       <div className="max-w-4xl w-full bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center">
         {/* Right Section (Form) */}
         <div className="w-full md:w-1/2">
           <h2 className="text-2xl font-semibold text-center md:text-left mb-4">
-            Login
+            Sign Up
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
+            {/* Name Field */}
             <div className="mb-4">
               <label
-                htmlFor="email"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
                 Name
@@ -63,30 +76,32 @@ const SignUp = () => {
               )}
               <input
                 type="text"
-                name="name"
                 {...register('name', { required: true })}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Enter your name"
               />
             </div>
+
+            {/* Photo URL Field */}
             <div className="mb-4">
               <label
-                htmlFor="email"
+                htmlFor="photourl"
                 className="block text-sm font-medium text-gray-700"
               >
-                PhotoUrl
+                Photo URL
               </label>
               {errors.photourl && (
-                <span className="text-red-600">This Photourl is required</span>
+                <span className="text-red-600">This Photo URL is required</span>
               )}
               <input
                 type="text"
-                name="name"
                 {...register('photourl', { required: true })}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Enter your name"
+                placeholder="Enter your photo URL"
               />
             </div>
+
+            {/* Email Field */}
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -99,13 +114,13 @@ const SignUp = () => {
               )}
               <input
                 type="email"
-                name="email"
                 {...register('email', { required: true })}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Enter your email"
               />
             </div>
 
+            {/* Password Field */}
             <div className="mb-4">
               <label
                 htmlFor="password"
@@ -113,27 +128,22 @@ const SignUp = () => {
               >
                 Password
               </label>
-              {/* Error for required */}
               {errors.password && errors.password.type === 'required' && (
                 <span className="text-red-600">Password is required</span>
               )}
-              {/* Error for pattern */}
               {errors.password && errors.password.type === 'pattern' && (
                 <span className="text-red-600">
                   Password must include uppercase, lowercase, a special
                   character, and be at least 6 characters long.
                 </span>
               )}
-              {/* Error for minLength */}
               {errors.password && errors.password.type === 'minLength' && (
                 <span className="text-red-600">
                   Password must be at least 6 characters long.
                 </span>
               )}
-              {/* Input Field */}
               <input
                 type="password"
-                name="password"
                 {...register('password', {
                   required: true,
                   minLength: 6,
@@ -146,30 +156,18 @@ const SignUp = () => {
               />
             </div>
 
-            {/* Captcha */}
-            {/* <div className="mb-4 flex items-center justify-between">
-              <div className="text-sm text-gray-600">Captcha Image</div>
-              <button
-                type="button"
-                onClick={handleReloadCaptcha}
-                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-              >
-                Reload Captcha
-              </button>
-            </div> */}
-
             <button
               type="submit"
               className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Sigin
+              Sign Up
             </button>
           </form>
 
-          {/* New Account / Social Login */}
+          {/* Social Login */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already registered?
+              Already registered?{' '}
               <a
                 href="/login"
                 className="text-indigo-600 hover:text-indigo-800 font-medium"
@@ -191,6 +189,7 @@ const SignUp = () => {
             </div>
           </div>
         </div>
+
         {/* Left Section (Image) */}
         <div className="w-full md:w-1/2 flex justify-center mb-6 md:mb-0">
           <img
