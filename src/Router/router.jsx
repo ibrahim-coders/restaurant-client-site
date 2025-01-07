@@ -14,6 +14,7 @@ import AllUsers from '../layout/DeshBoard/AllUsers';
 import AddItems from '../layout/DeshBoard/AddItems';
 import AdminRouter from './AdminRouter';
 import ManageItems from '../layout/DeshBoard/ManageItems';
+import UpdateItem from '../layout/DeshBoard/UpdateItem';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -70,6 +71,17 @@ const router = createBrowserRouter([
           </AdminRouter>
         ),
       },
+      {
+        path: '/dashboard/updateItem/:id',
+        element: (
+          <AdminRouter>
+            <UpdateItem />
+          </AdminRouter>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/menu/${params.id}`), // Correct URL and fetch function
+      },
+
       {
         path: '/dashboard/manageitems',
         element: (
