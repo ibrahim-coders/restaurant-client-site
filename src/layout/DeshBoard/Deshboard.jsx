@@ -4,6 +4,7 @@ import {
   FaEnvelope,
   FaHome,
   FaList,
+  FaPaypal,
   FaSearch,
   FaUsers,
   FaUtensils,
@@ -18,7 +19,6 @@ const Dashboard = () => {
         <ul className="menu p-4">
           {isAdmin ? (
             <>
-              {' '}
               <li>
                 <NavLink
                   to="/dashboard/addminhome"
@@ -58,7 +58,16 @@ const Dashboard = () => {
               <li>
                 <NavLink to="/dashboard/users" className="hover:bg-orange-300">
                   <FaUsers />
-                  <span> add User</span>
+                  <span> Add User</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/paymentHistory"
+                  className="hover:bg-orange-300"
+                >
+                  <FaPaypal />
+                  <span>Payment History</span>
                 </NavLink>
               </li>
             </>
@@ -80,8 +89,20 @@ const Dashboard = () => {
               <li>
                 <NavLink to="/order/contact" className="hover:bg-orange-300">
                   <FaEnvelope />
-
-                  <span>Contact</span>
+                  <span> Contact</span>
+                </NavLink>
+              </li>
+              {/* Add all additional user-related information you want to show here */}
+              <li>
+                <NavLink to="/order/payment" className="hover:bg-orange-300">
+                  <FaPaypal />
+                  <span> Payment</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/order/checkout" className="hover:bg-orange-300">
+                  <FaList />
+                  <span> Checkout</span>
                 </NavLink>
               </li>
             </>

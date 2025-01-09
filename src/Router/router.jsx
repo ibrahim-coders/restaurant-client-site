@@ -15,6 +15,9 @@ import AddItems from '../layout/DeshBoard/AddItems';
 import AdminRouter from './AdminRouter';
 import ManageItems from '../layout/DeshBoard/ManageItems';
 import UpdateItem from '../layout/DeshBoard/UpdateItem';
+import Payment from '../layout/DeshBoard/Payment/Payment';
+import PaymentHistory from '../layout/DeshBoard/Payment/PaymentHistory';
+import AdminHome from '../layout/DeshBoard/AdminHome';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -60,8 +63,20 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: '/dashboard/cart',
+        path: '/dashboard/addminhome',
+        element: <AdminHome />,
+      },
+      {
+        path: '/dashboard/booking',
         element: <Cart />,
+      },
+      {
+        path: '/dashboard/payment',
+        element: <Payment />,
+      },
+      {
+        path: '/dashboard/paymentHistory',
+        element: <PaymentHistory />,
       },
       {
         path: '/dashboard/additems',
@@ -71,6 +86,7 @@ const router = createBrowserRouter([
           </AdminRouter>
         ),
       },
+
       {
         path: '/dashboard/updateItem/:id',
         element: (
@@ -79,7 +95,7 @@ const router = createBrowserRouter([
           </AdminRouter>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/menu/${params.id}`), // Correct URL and fetch function
+          fetch(`http://localhost:5000/menu/${params.id}`),
       },
 
       {

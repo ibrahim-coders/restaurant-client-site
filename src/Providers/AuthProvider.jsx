@@ -13,6 +13,7 @@ export const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  console.log(user);
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxiosPublic();
   // Create User
@@ -58,6 +59,7 @@ const AuthProvider = ({ children }) => {
             if (res.data.token) {
               localStorage.setItem('access-token', res.data.token);
             }
+            setLoading(false);
           })
           .catch(err => {
             console.error('Error fetching token:', err);
@@ -65,8 +67,6 @@ const AuthProvider = ({ children }) => {
       } else {
         localStorage.removeItem('access-token');
       }
-
-      setLoading(false);
     });
 
     return () => unsubscript();
